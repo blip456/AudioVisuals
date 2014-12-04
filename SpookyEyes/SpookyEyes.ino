@@ -112,6 +112,10 @@ class blinker{
     	int r =  map(m_red, 0, 255, 0, m_intensity);
     	int g =  map(m_green, 0, 255, 0, m_intensity);
     	int b =  map(m_blue, 0, 255, 0, m_intensity);
+Serial.print(r);Serial.print("  ");Serial.println(m_red);
+Serial.print(b);Serial.print("  ");Serial.println(m_blue);
+Serial.print(g);Serial.print("  ");Serial.println(m_green);
+
     	uint32_t color = Color(r, g, b);
 
     	// Write to both 'eyes'
