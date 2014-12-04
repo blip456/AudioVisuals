@@ -1,9 +1,9 @@
 
 #include "SPI.h" // Comment out this line if using Trinket or Gemma
 #include "Adafruit_WS2801.h"
-//#ifdef __AVR_ATtiny85__
-//#include <avr/power.h>
-//#endif
+#ifdef __AVR_ATtiny85__
+#include <avr/power.h>
+#endif
 
 uint8_t dataPin  = 2;    // geel draad
 uint8_t clockPin = 3;    // wit draad
@@ -23,6 +23,8 @@ const int intervalMax = 300;
 
 const int stepInterval = 10;
 long lastStep = 0;
+
+Adafruit_WS2801 strip = Adafruit_WS2801(numPixels, dataPin, clockPin);
 
 /*****************************************************************************
 Blinker Class
@@ -56,7 +58,7 @@ class blinker{
   	}
 	// Initiate a blink at the specified pixel position
   	// All other blink parameters are randomly generated
-  	void StartBlink(int pos){
+  	void startBlink(int pos){
   		m_pos = pos;
 
     	// Pick a random color - skew toward red/orange/yellow part of the spectrum for extra creepyness
@@ -126,7 +128,7 @@ int countdown;
 
 //-----------END SPOOKY EYES Constants
 
-Adafruit_WS2801 strip = Adafruit_WS2801(leds, dataPin, clockPin);
+
 
 void setup() {
 	Serial.begin(9600);
@@ -139,9 +141,9 @@ void setup() {
   	strip.show(); 
 
   	countdown = 0; 
-}
+  }
 
-void loop() {
+  void loop() {
 	//START SPOOKY EYES
 	spookyEyes();
 }
@@ -165,11 +167,11 @@ void spookyEyes(){
             		}
             	}
 
-        		if (newPos >= 0)  // if we have a valid pixel to start with...{
+        		if (newPos >= 0){  // if we have a valid pixel to start with...
         			Serial.print(i);
         			Serial.print(" Activate - ");
         			Serial.println(newPos);
-        			blinkers[i].StartBlink(newPos);  
+        			blinkers[i].startBlink(newPos);  
          			countdown = random(intervalMin, intervalMax);  // random delay to next start
          		}
          	}
@@ -181,11 +183,11 @@ void spookyEyes(){
     }
 }
 
+
 /* Helper functions */
 
 // Create a 24 bit color value from R,G,B
-uint32_t Color(byte r, byte g, byte b)
-{
+uint32_t Color(byte r, byte g, byte b){
 	uint32_t c;
 	c = r;
 	c <<= 8;
