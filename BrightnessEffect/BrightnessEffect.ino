@@ -7,7 +7,7 @@
 uint8_t dataPin  = 2;    // geel draad
 uint8_t clockPin = 3;    // wit draad
 int numPixels = 59;
-int y = 24;  // staart lengte
+int y = 8;  // staart lengte
 
 Adafruit_WS2801 strip = Adafruit_WS2801(numPixels, dataPin, clockPin);
 
@@ -20,16 +20,30 @@ class RunningLed
     void gaOmhoog() {
       for (counter; counter < strip.numPixels(); counter++)
       {
-
+        
+        //1ste lus
+        
         strip.setPixelColor(counter, 255, 255, 255);
 
         for (int j = 1; j < y ; j++) {
-          c = 255 / ( j*3);
+          c= 255/(pow(2,j));
+          //
+          //c = 255 / ( j*3);
           strip.setPixelColor(counter - j, c, c, c);
         }
+        
+        //2de lus
+        
+        strip.setPixelColor(numPixels - counter, 255, 255, 255);
+
+        for (int j = 1; j < y ; j++) {
+          c = 255 / (pow(2, j));
+          strip.setPixelColor((numPixels - counter) + j, c, c, c);
+        }
+        
 
         strip.show();
-        delay(5);
+        delay(20);
         if (counter == numPixels - 1) {
           gaOmlaag();
         }
@@ -39,16 +53,29 @@ class RunningLed
     void gaOmlaag() {
       for (counter; counter >= 0; counter--)
       {
-
+        
+        //1ste lus
+        
         strip.setPixelColor(counter, 255, 255, 255);
 
         for (int j = 1; j < y ; j++) {
           c = 255 / (pow(2, j));
           strip.setPixelColor(counter + j, c, c, c);
         }
+         
+        //2de lus
+      
+      
+          
+        strip.setPixelColor(numPixels - counter, 255, 255, 255);
 
+        for (int j = 1; j < y ; j++) {
+          c = 255 / (pow(2, j));
+          strip.setPixelColor((numPixels - counter) - j, c, c, c);
+        }
+        
         strip.show();
-        //delay(5);
+        delay(20);
         if (counter == 0) {
           gaOmhoog();
         }
