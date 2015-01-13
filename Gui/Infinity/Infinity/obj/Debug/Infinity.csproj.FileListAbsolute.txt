@@ -1,0 +1,13 @@
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\bin\Debug\Infinity.exe.config
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.csprojResolveAssemblyReference.cache
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\MainWindow.baml
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\MainWindow.g.cs
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\App.g.cs
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity_MarkupCompile.cache
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.g.resources
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.Properties.Resources.resources
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.csproj.GenerateResource.Cache
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\bin\Debug\Infinity.exe
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\bin\Debug\Infinity.pdb
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.exe
+C:\Users\Yoran.Yoran\Dropbox\School\_Semester 5\Audio & Visual Productions\_Project\AudioVisuals\Gui\Infinity\Infinity\obj\Debug\Infinity.pdb
