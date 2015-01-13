@@ -11,17 +11,17 @@ int numPixels=59;
 
 //-----------SPOOKY EYES Constants
 
-const int maxEyes = 3; // maximum number of concurrently active blinkers
+const int maxEyes = 5; // maximum number of concurrently active blinkers
 
 // dead-time between lighting of a range of pixels
-const int deadTimeMin = 50;
-const int deadTimeMax = 500;
+const int deadTimeMin = 5;
+const int deadTimeMax = 50;
 
 // interval between blink starts - independent of position
-const int intervalMin = 10;
-const int intervalMax = 300;
+const int intervalMin = 5;
+const int intervalMax = 150;
 
-const int stepInterval = 10;
+const int stepInterval = 5;
 long lastStep = 0;
 
 Adafruit_WS2801 strip = Adafruit_WS2801(numPixels, dataPin, clockPin);
@@ -62,9 +62,9 @@ class blinker{
   		m_pos = pos;
 
     	// Pick a random color - skew toward red/orange/yellow part of the spectrum for extra creepyness
-    	m_red = random(150, 255);
-    	m_blue = 0;
-    	m_green = random(100);
+    	m_red = random(0, 255);
+    	m_blue = random(0,255);
+    	m_green = random(0,255);
 
     	m_repeats += random(1, 3);
 
@@ -112,15 +112,12 @@ class blinker{
     	int r =  map(m_red, 0, 255, 0, m_intensity);
     	int g =  map(m_green, 0, 255, 0, m_intensity);
     	int b =  map(m_blue, 0, 255, 0, m_intensity);
-Serial.print(r);Serial.print("  ");Serial.println(m_red);
-Serial.print(b);Serial.print("  ");Serial.println(m_blue);
-Serial.print(g);Serial.print("  ");Serial.println(m_green);
 
-    	uint32_t color = Color(r, g, b);
 
+    //	uint32_t color = Color(r, g, b);
     	// Write to both 'eyes'
-    	strip.setPixelColor(m_pos, color);
-    	strip.setPixelColor(m_pos +1, color);
+    	strip.setPixelColor(m_pos, b,g,r);
+    	strip.setPixelColor(m_pos +1, b,g,r);
     }
 };
 
