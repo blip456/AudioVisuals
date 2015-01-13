@@ -1,14 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Notification"
+        android:text="Test Notification"
         android:id="@+id/btnCreateNotify"
         android:onClick="buttonClicked"
         android:layout_alignParentTop="true"
@@ -16,43 +19,241 @@
         android:layout_alignParentRight="true"/>
 
 
-
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear All Notification"
-        android:id="@+id/btnClearNotify"
-        android:onClick="buttonClicked"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Push notifications of following applications:"
+        android:id="@+id/textView"
         android:layout_below="@+id/btnCreateNotify"
-        android:layout_alignLeft="@+id/btnCreateNotify"
-        android:layout_alignRight="@+id/btnCreateNotify"/>
+        android:layout_alignParentStart="true" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/textView">
 
-    <ScrollView android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/btnListNotify"
-        android:layout_below="@+id/btnListNotify"
-        android:layout_alignLeft="@+id/btnListNotify">
+        <ImageView
+            android:id="@+id/twitterLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_twitter_logo"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="NotificationListenerService Example"
-            android:id="@+id/textView"
-            />
+            android:id="@+id/twitterName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/twitterLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Twitter"/>
+
+        <Switch
+            android:id="@+id/twitterToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/twitterName"/>
 
 
-    </ScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List of Notification"
-        android:id="@+id/btnListNotify"
-        android:onClick="buttonClicked"
-        android:layout_below="@+id/btnClearNotify"
-        android:layout_alignLeft="@+id/btnClearNotify"
-        android:layout_alignRight="@+id/btnClearNotify"/>
+        <ImageView
+            android:id="@+id/facebookLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/twitterLogo"
+            android:src="@drawable/ic_facebook_logo"/>
 
+        <TextView
+            android:id="@+id/facebookName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/facebookLogo"
+            android:layout_below="@id/twitterName"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Facebook"/>
+
+        <Switch
+            android:id="@+id/facebookToggle"
+            android:layout_below="@id/twitterToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/facebookName"/>
+
+
+
+        <ImageView
+            android:id="@+id/instagramLogo"
+            android:layout_below="@id/facebookLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_instagram_logo"/>
+
+        <TextView
+            android:id="@+id/instagramName"
+            android:layout_below="@id/facebookName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/instagramLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Instagram"/>
+
+        <Switch
+            android:id="@+id/instagramToggle"
+            android:layout_below="@id/facebookToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/instagramName"/>
+
+
+        <ImageView
+            android:id="@+id/gmailLogo"
+            android:layout_below="@id/instagramLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_gmail_logo"/>
+
+        <TextView
+            android:id="@+id/gmailName"
+            android:layout_below="@id/instagramName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/gmailLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Gmail"/>
+
+        <Switch
+            android:id="@+id/gmailToggle"
+            android:layout_below="@id/instagramToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/gmailName"/>
+
+
+        <ImageView
+            android:id="@+id/smsLogo"
+            android:layout_below="@id/gmailLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_chat"/>
+
+        <TextView
+            android:id="@+id/smsName"
+            android:layout_below="@id/gmailName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/smsLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="SMS"/>
+
+        <Switch
+            android:id="@+id/smsToggle"
+            android:layout_below="@id/gmailToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/smsName"/>
+
+
+        <ImageView
+            android:id="@+id/callLogo"
+            android:layout_below="@id/smsLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_call"/>
+
+        <TextView
+            android:id="@+id/callName"
+            android:layout_below="@id/smsName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/callLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Call"/>
+
+        <Switch
+            android:id="@+id/callToggle"
+            android:layout_below="@id/smsToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/callName"/>
+
+
+
+        <ImageView
+            android:id="@+id/pushLogo"
+            android:layout_below="@id/callLogo"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_pushbullet_logo"/>
+
+        <TextView
+            android:id="@+id/pushName"
+            android:layout_below="@id/callName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/pushLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Pushbullet"/>
+
+        <Switch
+            android:id="@+id/pushToggle"
+            android:layout_below="@id/callToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/pushName"/>
+
+        </RelativeLayout>
 </RelativeLayout>
