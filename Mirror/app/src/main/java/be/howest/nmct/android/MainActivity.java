@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MotionEvent;
@@ -14,20 +15,24 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends ActionBarActivity {
 
     private NotificationReceiver nReceiver;
     SharedPreferences.Editor editor;
     public SharedPreferences sharedpreferences;
+    public static List<StatusBarNotification> arrImportantNotifications;
 
-    private static boolean isTwitter;
-    private static boolean isFacebook;
-    private static boolean isInstagram;
-    private static boolean isGmail;
-    private static boolean isSMS;
-    private static boolean isCall;
-    private static boolean isPushbullet;
+    public static boolean isTwitter;
+    public static boolean isFacebook;
+    public static boolean isInstagram;
+    public static boolean isGmail;
+    public static boolean isSMS;
+    public static boolean isCall;
+    public static boolean isPushbullet;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Twitter = "isTwitter";
@@ -51,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        arrImportantNotifications = new ArrayList<>();
         nReceiver = new NotificationReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("be.howest.nmct.android.NOTIFICATION_LISTENER_EXAMPLE");
@@ -81,56 +87,74 @@ public class MainActivity extends ActionBarActivity {
         {
             isGmail = sharedpreferences.getBoolean(Gmail, true);
         }
+        if (sharedpreferences.contains(SMS))
+        {
+            isSMS = sharedpreferences.getBoolean(SMS, true);
+        }
+        if (sharedpreferences.contains(Call))
+        {
+            isCall = sharedpreferences.getBoolean(Call, true);
+        }
+        if (sharedpreferences.contains(Pushbullet))
+        {
+            isPushbullet = sharedpreferences.getBoolean(Pushbullet, true);
+        }
 
         swhTwitter.setChecked(isTwitter);
         swhFacebook.setChecked(isFacebook);
         swhInstagram.setChecked(isInstagram);
         swhGmail.setChecked(isGmail);
-        swhTwitter.setChecked(isTwitter);
-        swhTwitter.setChecked(isTwitter);
-        swhTwitter.setChecked(isTwitter);
-        swhTwitter.setChecked(isTwitter);
+        swhSMS.setChecked(isSMS);
+        swhCall.setChecked(isCall);
+        swhPushbullet.setChecked(isPushbullet);
 
         swhTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Twitter, swhTwitter.isChecked());
+                isTwitter = !isTwitter;
             }
         });
         swhFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Facebook, swhFacebook.isChecked());
+                isFacebook = !isFacebook;
             }
         });
         swhInstagram.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Instagram, swhInstagram.isChecked());
+                isInstagram = !isInstagram;
             }
         });
         swhGmail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Gmail, swhGmail.isChecked());
+                isGmail = !isGmail;
             }
         });
         swhSMS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(SMS, swhSMS.isChecked());
+                isSMS = !isSMS;
             }
         });
         swhCall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Call, swhCall.isChecked());
+                isCall = !isCall;
             }
         });
         swhPushbullet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Pushbullet, swhPushbullet.isChecked());
+                isPushbullet = !isPushbullet;
             }
         });
     }
@@ -147,7 +171,7 @@ public class MainActivity extends ActionBarActivity {
         if(v.getId() == R.id.btnCreateNotify){
             NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this);
-            ncomp.setContentTitle("Mirror");
+            ncomp.setContentTitle(getString(R.string.app_name));
             ncomp.setContentText("The grid should light up");
             ncomp.setTicker("The grid should light up");
             ncomp.setSmallIcon(R.drawable.notification_icon);
