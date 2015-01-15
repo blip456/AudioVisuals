@@ -24,7 +24,6 @@ public class MainActivity extends ActionBarActivity {
     private NotificationReceiver nReceiver;
     SharedPreferences.Editor editor;
     public SharedPreferences sharedpreferences;
-    public static List<StatusBarNotification> arrImportantNotifications;
 
     public static boolean isTwitter;
     public static boolean isFacebook;
@@ -33,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
     public static boolean isSMS;
     public static boolean isCall;
     public static boolean isPushbullet;
+    public static boolean isMessenger;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Twitter = "isTwitter";
@@ -42,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String SMS = "isSMS";
     public static final String Call = "isCall";
     public static final String Pushbullet = "isPushbullet";
+    public static final String Messenger = "isMessenger";
 
     Switch swhTwitter;
     Switch swhFacebook;
@@ -50,13 +51,13 @@ public class MainActivity extends ActionBarActivity {
     Switch swhSMS;
     Switch swhCall;
     Switch swhPushbullet;
+    Switch swhMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        arrImportantNotifications = new ArrayList<>();
         nReceiver = new NotificationReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("be.howest.nmct.android.NOTIFICATION_LISTENER_EXAMPLE");
@@ -69,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
         swhSMS = (Switch)findViewById(R.id.smsToggle);
         swhCall = (Switch)findViewById(R.id.callToggle);
         swhPushbullet = (Switch)findViewById(R.id.pushToggle);
+        swhMessenger = (Switch)findViewById(R.id.messengerToggle);
 
 
         if (sharedpreferences.contains(Twitter))
@@ -99,6 +101,10 @@ public class MainActivity extends ActionBarActivity {
         {
             isPushbullet = sharedpreferences.getBoolean(Pushbullet, true);
         }
+        if (sharedpreferences.contains(Messenger))
+        {
+            isMessenger = sharedpreferences.getBoolean(Messenger, true);
+        }
 
         swhTwitter.setChecked(isTwitter);
         swhFacebook.setChecked(isFacebook);
@@ -107,6 +113,7 @@ public class MainActivity extends ActionBarActivity {
         swhSMS.setChecked(isSMS);
         swhCall.setChecked(isCall);
         swhPushbullet.setChecked(isPushbullet);
+        swhMessenger.setChecked(isMessenger);
 
         swhTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -155,6 +162,13 @@ public class MainActivity extends ActionBarActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editPrefs(Pushbullet, swhPushbullet.isChecked());
                 isPushbullet = !isPushbullet;
+            }
+        });
+        swhMessenger.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editPrefs(Messenger, swhMessenger.isChecked());
+                isMessenger = !isMessenger;
             }
         });
     }

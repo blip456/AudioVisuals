@@ -10,24 +10,32 @@ import android.os.AsyncTask;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.view.View;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 
 public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
     private NLServiceReceiver nlservicereciver;
-    private String baseAPIurl = "http://172.23.49.0:3000/";
-
+    private String baseAPIurl = "http://192.168.2.205:3000/";
+    public  List<String> arrImportantNotifications;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        arrImportantNotifications = new ArrayList<>();
         nlservicereciver = new NLServiceReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("be.howest.nmct.android.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
@@ -45,56 +53,56 @@ public class NLService extends NotificationListenerService {
 
         if(sbn.getPackageName().equals("com.twitter.android") && MainActivity.isTwitter)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "twitter");
+            new APIGetTask().execute(baseAPIurl + "twitter?packagename=" + sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
         if(sbn.getPackageName().equals("com.facebook.katana") && MainActivity.isFacebook)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "facebook");
+            new APIGetTask().execute(baseAPIurl + "facebook?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
-        if(sbn.getPackageName().equals("com.facebook.orca") && MainActivity.isFacebook)
+        if(sbn.getPackageName().equals("com.facebook.orca") && MainActivity.isMessenger)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "messenger");
+            new APIGetTask().execute(baseAPIurl + "messenger?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
         if(sbn.getPackageName().equals("com.instagram.android") && MainActivity.isInstagram)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "instagram");
+            new APIGetTask().execute(baseAPIurl + "instagram?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
         if(sbn.getPackageName().equals("com.google.android.gm") && MainActivity.isGmail)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "gmail");
+            new APIGetTask().execute(baseAPIurl + "gmail?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
-        if(sbn.getPackageName().equals("com.textra") && MainActivity.isSMS)
+        if(sbn.getPackageName().equals("com.textra") || sbn.getPackageName().equals("com.google.android.apps.messaging") && MainActivity.isSMS)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "sms");
+            new APIGetTask().execute(baseAPIurl + "sms?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
         if(sbn.getPackageName().equals("com.google.android.dialer") || sbn.getPackageName().equals("com.android.server.telecom") && MainActivity.isCall)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "call");
+            new APIGetTask().execute(baseAPIurl + "call?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
         if(sbn.getPackageName().equals("com.pushbullet.android") && MainActivity.isPushbullet)
         {
-            new RetrieveFeedTask().execute(baseAPIurl + "pushbullet");
+            new APIGetTask().execute(baseAPIurl + "pushbullet?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i("Er is een notificatie", "Packagename:" + sbn.getPackageName());
@@ -102,7 +110,7 @@ public class NLService extends NotificationListenerService {
         if(sbn.getPackageName().equals("be.howest.nmct.android"))
         {
             AddNotificationToArray(sbn);
-            new RetrieveFeedTask().execute(baseAPIurl + "test");
+            new APIGetTask().execute(baseAPIurl + "test?packagename="+ sbn.getPackageName());
             Log.i("Er is een notificatie", "Packagename:" + sbn.getPackageName());
         }
         Log.i("Er is een notificatie", "Algemene notificatie: Packagename:" + sbn.getPackageName());
@@ -110,13 +118,26 @@ public class NLService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        new RetrieveFeedTask().execute(baseAPIurl + "clear");
-        Log.i("Er is een notificatie", "Maar je hebt ze verwijderd: Packagename:" + sbn.getPackageName());
+        new APIGetTask().execute(baseAPIurl + "clear?packagename="+sbn.getPackageName());
+       /* new APIGetTask().execute(baseAPIurl + "clear");
+        int i = 0;
+        for(String s : arrImportantNotifications)
+        {
+            if(s.equals(sbn.getPackageName()))
+            {
+                arrImportantNotifications.remove(i);
+                break;
+            }
+            i++;
+        }
+
+        Log.i("Notificatie: ", "Nog in de array " + arrImportantNotifications);*/
+
     }
 
     public void AddNotificationToArray(StatusBarNotification sbn)
     {
-        MainActivity.arrImportantNotifications.add(sbn);
+        arrImportantNotifications.add(sbn.getPackageName());
     }
 
     class NLServiceReceiver extends BroadcastReceiver{
@@ -144,7 +165,7 @@ public class NLService extends NotificationListenerService {
         }
     }
 
-    class RetrieveFeedTask extends AsyncTask<String, Void, String> {
+    class APIGetTask extends AsyncTask<String, Void, String> {
 
         private Exception exception;
 
@@ -152,10 +173,10 @@ public class NLService extends NotificationListenerService {
             try {
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                URI test = new URI(urls[0]);
-                Log.v("URL: ", "de url is: " + urls[0]);
-                request.setURI(test);
+                URI uri = new URI(urls[0]);
+                request.setURI(uri);
                 HttpResponse response = client.execute(request);
+                Log.i("API: ", "Response of get is: " + response);
             } catch (Exception e) {
                 this.exception = e;
                 exception.printStackTrace();
@@ -164,5 +185,4 @@ public class NLService extends NotificationListenerService {
             return "";
         }
     }
-
 }

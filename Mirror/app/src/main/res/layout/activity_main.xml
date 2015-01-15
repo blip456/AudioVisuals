@@ -255,5 +255,38 @@
             android:textOff="Off"
             android:layout_toRightOf="@id/pushName"/>
 
+
+        <ImageView
+            android:id="@+id/messengerLogo"
+            android:layout_below="@id/pushLogo"
+            android:layout_height="28dp"
+            android:layout_width="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_messenger_icon"/>
+
+        <TextView
+            android:id="@+id/messengerName"
+            android:layout_below="@id/pushName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_toRightOf="@id/messengerLogo"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginLeft="18dp"
+            android:text="Facebook Messenger"/>
+
+        <Switch
+            android:id="@+id/messengerToggle"
+            android:layout_below="@id/pushToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textOn="On"
+            android:textOff="Off"
+            android:layout_toRightOf="@id/messengerName"/>
+
         </RelativeLayout>
 </RelativeLayout>
