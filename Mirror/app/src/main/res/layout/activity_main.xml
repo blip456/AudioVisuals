@@ -18,6 +18,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"/>
 
+<ToggleButton
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Vibrate on notification"
+    android:id="@+id/toggleVibrate"
+    android:layout_below="@id/btnCreateNotify"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,8 +31,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Push notifications of following applications:"
         android:id="@+id/textView"
-        android:layout_below="@+id/btnCreateNotify"
+        android:layout_below="@+id/toggleVibrate"
         android:layout_alignParentStart="true" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

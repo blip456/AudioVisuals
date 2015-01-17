@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
     private NotificationReceiver nReceiver;
     SharedPreferences.Editor editor;
     public SharedPreferences sharedpreferences;
+    ToggleButton tglVibrate;
+
 
     public static boolean isTwitter;
     public static boolean isFacebook;
@@ -33,6 +36,8 @@ public class MainActivity extends ActionBarActivity {
     public static boolean isCall;
     public static boolean isPushbullet;
     public static boolean isMessenger;
+    public static boolean isVibrate;
+
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Twitter = "isTwitter";
@@ -43,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String Call = "isCall";
     public static final String Pushbullet = "isPushbullet";
     public static final String Messenger = "isMessenger";
+    public static final String Vibrate = "isVibrate";
 
     Switch swhTwitter;
     Switch swhFacebook;
@@ -62,6 +68,8 @@ public class MainActivity extends ActionBarActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("be.howest.nmct.android.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
+
+        tglVibrate = (ToggleButton)findViewById(R.id.toggleVibrate);
 
         swhTwitter = (Switch)findViewById(R.id.twitterToggle);
         swhFacebook = (Switch)findViewById(R.id.facebookToggle);
@@ -105,6 +113,10 @@ public class MainActivity extends ActionBarActivity {
         {
             isMessenger = sharedpreferences.getBoolean(Messenger, true);
         }
+        if (sharedpreferences.contains(Vibrate))
+        {
+            isVibrate = sharedpreferences.getBoolean(Vibrate, true);
+        }
 
         swhTwitter.setChecked(isTwitter);
         swhFacebook.setChecked(isFacebook);
@@ -114,6 +126,16 @@ public class MainActivity extends ActionBarActivity {
         swhCall.setChecked(isCall);
         swhPushbullet.setChecked(isPushbullet);
         swhMessenger.setChecked(isMessenger);
+
+        tglVibrate.setChecked(isVibrate);
+
+        tglVibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editPrefs(Vibrate, tglVibrate.isChecked());
+                isVibrate = !isVibrate;
+            }
+        });
 
         swhTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

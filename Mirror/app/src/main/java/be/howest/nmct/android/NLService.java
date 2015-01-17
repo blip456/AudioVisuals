@@ -119,20 +119,6 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         new APIGetTask().execute(baseAPIurl + "clear?packagename="+sbn.getPackageName());
-       /* new APIGetTask().execute(baseAPIurl + "clear");
-        int i = 0;
-        for(String s : arrImportantNotifications)
-        {
-            if(s.equals(sbn.getPackageName()))
-            {
-                arrImportantNotifications.remove(i);
-                break;
-            }
-            i++;
-        }
-
-        Log.i("Notificatie: ", "Nog in de array " + arrImportantNotifications);*/
-
     }
 
     public void AddNotificationToArray(StatusBarNotification sbn)
@@ -173,7 +159,7 @@ public class NLService extends NotificationListenerService {
             try {
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                URI uri = new URI(urls[0]);
+                URI uri = new URI(urls[0]+"&vibrate="+MainActivity.isVibrate);
                 request.setURI(uri);
                 HttpResponse response = client.execute(request);
                 Log.i("API: ", "Response of get is: " + response);
