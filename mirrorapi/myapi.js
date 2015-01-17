@@ -8,22 +8,75 @@ var options = {
     scriptPath: path.join(__dirname, 'scr')
 };
 app.use(express['static'](__dirname));
-var ws281x = require("rpi-ws281x-native");
 
+// Led Grid
+var ws281x = require("rpi-ws281x-native");
 var NUM_LEDS = parseInt(process.argv[2], 50) || 50,
 pixelData = new Uint32Array(NUM_LEDS),
 notifyPixels = new Array(NUM_LEDS+1);
-
 ws281x.init(NUM_LEDS);
-
 // ---- trap the SIGINT and reset before exit
 process.on('SIGINT', function () {
   ws281x.reset();
   process.nextTick(function () { process.exit(0); });
 });
-
-// Led Grid
 noNotify();
+
+// Ledstrip
+ar leds = require('rpi-ws2801');
+leds.connect(59); // assign number of WS2801 LEDs
+process.on( 'SIGINT', function() {
+  console.log( "\nshutting down from (Ctrl-C)" )
+  leds.clear(); 
+  leds.disconnect();
+  process.exit( )
+})
+leds.fill(0xFF, 255, 0x00);
+// after 2 seconds set first 6 LEDs to (red, green, blue, red, green, blue)
+setTimeout(function(){
+  console.log("red green blue red green blue");
+  leds.setRGB(0, '#FF0000');    // set LED1 to red
+  leds.setRGB(1, '#00FF00');    // set LED2 to green
+  leds.setRGB(2, '#0000FF');    // set LED3 to blue
+ 
+  leds.setColor(3, [255,0,0]);  // set LED4 to red
+  leds.setColor(4, [0,255,0]);  // set LED5 to green
+  leds.setColor(5, [0,0,255]);  // set LED6 to blue
+  
+  // send all set colors to SPI via update();
+  leds.update();
+}, 2000);
+
+setTimeout(randomAnimation, 4000);
+function randomAnimation(){
+  console.log("-- random color animation --");
+  console.log("press (Ctrl-C) to stop");  
+  var colorBuffer = new Buffer(leds.getChannelCount());
+  var animationTick = 0.005;
+  var angle = 0;
+  var ledDistance = 0.3;
+  setInterval(function(){
+    angle = (angle < Math.PI * 2) ? angle : angle - Math.PI*2;
+    for (var i=0; i<colorBuffer.length; i+=3){
+      //red
+      colorBuffer[i] = 128 + Math.sin(angle + (i/3)*ledDistance) * 128;
+      //green
+      colorBuffer[i+1] = 128 + Math.sin(angle * -5 + (i/3)*ledDistance) * 128;
+      //blue
+      colorBuffer[i+2] = 128 + Math.sin(angle * 7 + (i/3)*ledDistance) * 128;
+    }
+    leds.sendRgbBuffer(colorBuffer);
+    angle+=animationTick;
+  },5);
+};
+
+
+
+
+
+
+
+
 var isCalling = false;
 var i = 0;
 var l = arrPackageNames.length;
