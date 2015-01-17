@@ -149,7 +149,6 @@ public class NLService extends NotificationListenerService {
                 sendBroadcast(i3);
 
             }
-
         }
     }
 

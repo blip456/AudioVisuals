@@ -296,4 +296,8 @@
             android:layout_toRightOf="@id/messengerName"/>
 
         </RelativeLayout>
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"></Spinner>
 </RelativeLayout>
