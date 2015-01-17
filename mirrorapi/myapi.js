@@ -24,7 +24,51 @@ process.on('SIGINT', function () {
 
 // Led Grid
 noNotify();
-
+var isCalling = false;
+var i = 0;
+var l = arrPackageNames.length;
+setInterval(carousel, 2000);
+function carousel()
+{
+  if(isCalling)
+  {
+     calling();
+  }
+  else
+  {
+  l = arrPackageNames.length;
+  if(l === 0)
+  {
+    noNotify();
+  }
+  else
+  {
+      console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
+      if(arrPackageNames[i] === "com.twitter.android")        
+          twitter();
+      else if(arrPackageNames[i] === "com.facebook.katana")        
+          facebook();
+      else if(arrPackageNames[i] === "com.instagram.android")          
+          instagram();
+      else if(arrPackageNames[i] === "com.google.android.gm")          
+        mail();
+      else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.google.android.apps.messaging")          
+        sms();
+      else if(arrPackageNames[i] === "com.google.android.dialer")          
+        calling();
+      else if(arrPackageNames[i] === "be.howest.nmct.android")          
+        testing();
+      else if(arrPackageNames[i] === "com.facebook.orca")          
+        messenger();
+      else if(arrPackageNames[i] === "com.pushbullet.android")          
+        facebook();
+      if(i === l-1)
+        i = 0;
+      else
+        i ++;
+    }
+  }
+}
 // ---- animation-loop
 //uncomment when it is possible to acces an function inthe running code.
 setInterval(drawLEDs,1000/30);
@@ -215,9 +259,7 @@ function testing(){
   for (var i = 21; i < 31; i++) {
     notifyPixels[i] = false;
   };  
-
 }
-
 
 // rainbow-colors, taken from http://goo.gl/Cs3H0v
 function colowheel(pos) {
@@ -233,63 +275,73 @@ function rgb2Int(r, g, b) {
 
 
 app.get('/twitter', function (req, res) {
-    //twitter();
+    twitter();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
-    //facebook();
+    facebook();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
-    //messenger();
+    messenger();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
-    //instagram();
+    instagram();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
-    //mail();
+    mail();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
-    //sms();
+    sms();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
-    //calling();
-    arrPackageNames.push(req.query.packagename);
+    calling();
+    isCalling = true;    
     res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
-    //testing();
+    testing();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
-    //testing();
+    testing();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Mirari turned on');
+  console.log(arrPackageNames);
 });
 app.get('/clear', function (req, res) {
   console.log(req.query.packagename);
 	if(req.query.packagename === undefined)
 	{
-    //noNotify();
+    noNotify();
 		res.send('Please provide us with a package name');
 	}
 	else
 	{		
-    var i = arrPackageNames.indexOf(req.query.packagename);
-    if(i != -1) 
+    i = 0;
+    var j = arrPackageNames.indexOf(req.query.packagename);
+    if(j != -1) 
     {
-      arrPackageNames.splice(i, 1);
+      arrPackageNames.splice(j, 1);
     }
     res.send('Notification is cleared and package name is deleted from array');
   }

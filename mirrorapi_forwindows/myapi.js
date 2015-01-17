@@ -5,48 +5,58 @@ var arrPackageNames = [];
 
 app.get('/twitter', function (req, res) {
     //twitter();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
     //facebook();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
     //messenger();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
     //instagram();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
     //mail();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
     //sms();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
     //calling();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
     //testing();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
     //testing();
+    if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Mirari turned on');
+  console.log(arrPackageNames);
 });
 app.get('/clear', function (req, res) {
   console.log(req.query.packagename);
