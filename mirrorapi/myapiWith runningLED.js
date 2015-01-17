@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var arrPackageNames = [];
 var options = {
-    scriptPath: path.join(__dirname, 'scr')
+  scriptPath: path.join(__dirname, 'scr')
 };
 app.use(express['static'](__dirname));
 
@@ -24,7 +24,8 @@ noNotify();
 
 // Ledstrip
 var leds = require('rpi-ws2801');
-leds.connect(59); // assign number of WS2801 LEDs
+var numLEDSStrip = 59;
+leds.connect(numLEDSStrip); // assign number of WS2801 LEDs
 process.on( 'SIGINT', function() {
   console.log( "\nshutting down from (Ctrl-C)" )
   leds.clear(); 
@@ -32,77 +33,133 @@ process.on( 'SIGINT', function() {
   process.exit( )
 })
 leds.fill(0xFF, 255, 0x00);
-// after 2 seconds set first 6 LEDs to (red, green, blue, red, green, blue)
-setTimeout(function(){
-  console.log("red green blue red green blue");
-  leds.setRGB(0, '#FF0000');    // set LED1 to red
-  leds.setRGB(1, '#00FF00');    // set LED2 to green
-  leds.setRGB(2, '#0000FF');    // set LED3 to blue
- 
-  leds.setColor(3, [255,0,0]);  // set LED4 to red
-  leds.setColor(4, [0,255,0]);  // set LED5 to green
-  leds.setColor(5, [0,0,255]);  // set LED6 to blue
-  
-  // send all set colors to SPI via update();
-  leds.update();
-}, 2000);
+  //TODO: OProepen functie
+  setInterval(function(){  
+  //check which function to run
+  // if(runningleds){
+  //   runningleds();
+  //   delay(delayRunning);
+  // }
+  runningLeds();
+},5);
 
-setTimeout(randomAnimation, 4000);
+//randomAnimation vars
+var colorBuffer = new Buffer(leds.getChannelCount());
+var animationTick = 0.005;
+var angle = 0;
+var ledDistance = 0.3;
+
 function randomAnimation(){
-  console.log("-- random color animation --");
-  console.log("press (Ctrl-C) to stop");  
-  var colorBuffer = new Buffer(leds.getChannelCount());
-  var animationTick = 0.005;
-  var angle = 0;
-  var ledDistance = 0.3;
-  setInterval(function(){
-    angle = (angle < Math.PI * 2) ? angle : angle - Math.PI*2;
-    for (var i=0; i<colorBuffer.length; i+=3){
-      //red
-      colorBuffer[i] = 128 + Math.sin(angle + (i/3)*ledDistance) * 128;
-      //green
-      colorBuffer[i+1] = 128 + Math.sin(angle * -5 + (i/3)*ledDistance) * 128;
-      //blue
-      colorBuffer[i+2] = 128 + Math.sin(angle * 7 + (i/3)*ledDistance) * 128;
+  angle = (angle < Math.PI * 2) ? angle : angle - Math.PI*2;
+  for (var i=0; i<colorBuffer.length; i+=3){
+    //red
+    colorBuffer[i] = 128 + Math.sin(angle + (i/3)*ledDistance) * 128;
+    //green
+    colorBuffer[i+1] = 128 + Math.sin(angle * -5 + (i/3)*ledDistance) * 128;
+    //blue
+    colorBuffer[i+2] = 128 + Math.sin(angle * 7 + (i/3)*ledDistance) * 128;
+  }
+  leds.sendRgbBuffer(colorBuffer);
+  angle+=animationTick;
+}
+
+//runningleds vars
+var staart = 8;
+var delayRunning = 5;
+var counter = 0;
+var c = 0;
+var led;
+
+var colors = new Array(3)
+for (var i = 0; i < 3; i++) {
+  colors[i] = new Array(staart+1);
+}
+
+function runningLeds(){
+  leds.setColor(0, [255,0,0]);
+  giveMeMyColors();
+  for (counter; counter <= numLEDSStrip; counter++){
+    //1ste lus
+    for (var j = staart; j >= 1 ; j--) {
+      leds.setColor(counter + j, colors[0][j], colors[1][j], colors[2][j]);
     }
-    leds.sendRgbBuffer(colorBuffer);
-    angle+=animationTick;
-  },5);
-};
+    leds.setColor(counter, colors[0][0], colors[1][0], colors[2][0]);
+
+    for (var j = 1; j < staart ; j++) {
+      leds.setColor(counter - j, colors[0][j], colors[1][j], colors[2][j]);
+    }
 
 
+    //2de lus
+    for (var j = staart; j >= 1 ; j--) {
+      leds.setColor((numLEDSStrip - counter) - j, colors[0][j], colors[1][j], colors[2][j]);
+    }
+    leds.setColor(numLEDSStrip - counter,colors[0][0], colors[1][0], colors[2][0]);
 
+    for (var j = 1; j < staart ; j++) {
+      leds.setColor((numLEDSStrip - counter) + j, colors[0][j], colors[1][j], colors[2][j]);
+    }
 
+    leds.update();
+  }
+  counter = 0;
 
+}
 
+function giveMeMyColors() {
+  
 
+  //generate rgb color
+  var color = new Array(3);
+  for (var i = 0; i < 3; i++) {
+    color[i] = Math.floor(Math.random() * (256));
+  }
+  //opvullen colors array
+  for (var j = 0; j <= 2; j++) {
 
-var isCalling = false;
-var i = 0;
-var l = arrPackageNames.length;
-setInterval(carousel, 2000);
-function carousel()
-{
-  if(isCalling)
+    var intensity = 255;
+
+    colors[j][0] = map(color[j], 0, 255, 0, intensity);
+
+    for (var i = 1; i <= staart; i++) {
+      intensity = colors[j][0] / (Math.pow(2, i));
+      colors[j][i] = map(color[j], 0, 255, 0, intensity);
+    }
+  }
+}
+  function map(x, in_min, in_max, out_min, out_max)
   {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
+
+
+  var isCalling = false;
+  var i = 0;
+  var l = arrPackageNames.length;
+  setInterval(carousel, 2000);
+  function carousel()
+  {
+    if(isCalling)
+    {
      calling();
-  }
-  else
-  {
-  l = arrPackageNames.length;
-  if(l === 0)
-  {
-    noNotify();
-  }
-  else
-  {
+   }
+   else
+   {
+    l = arrPackageNames.length;
+    if(l === 0)
+    {
+      noNotify();
+    }
+    else
+    {
       console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
       if(arrPackageNames[i] === "com.twitter.android")        
-          twitter();
+        twitter();
       else if(arrPackageNames[i] === "com.facebook.katana")        
-          facebook();
+        facebook();
       else if(arrPackageNames[i] === "com.instagram.android")          
-          instagram();
+        instagram();
       else if(arrPackageNames[i] === "com.google.android.gm")          
         mail();
       else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.google.android.apps.messaging")          
@@ -328,68 +385,68 @@ function rgb2Int(r, g, b) {
 
 
 app.get('/twitter', function (req, res) {
-    twitter();
-    if(req.query.packagename !== undefined)
+  twitter();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Twitter turned on');
+  res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
-    facebook();
-    if(req.query.packagename !== undefined)
+  facebook();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Facebook turned on');
+  res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
-    messenger();
-    if(req.query.packagename !== undefined)
+  messenger();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Messenger turned on');
+  res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
-    instagram();
-    if(req.query.packagename !== undefined)
+  instagram();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Instagram turned on');
+  res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
-    mail();
-    if(req.query.packagename !== undefined)
+  mail();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Gmail turned on');
+  res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
-    sms();
-    if(req.query.packagename !== undefined)
+  sms();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('SMS turned on');
+  res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
-    calling();
-    isCalling = true;    
-    res.send('Call turned on');
+  calling();
+  isCalling = true;    
+  res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
-    testing();
-    if(req.query.packagename !== undefined)
+  testing();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Pushbullet turned on');
+  res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
-    testing();
-    if(req.query.packagename !== undefined)
+  testing();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Mirari turned on');
+  res.send('Mirari turned on');
   console.log(arrPackageNames);
 });
 app.get('/clear', function (req, res) {
   console.log(req.query.packagename);
-	if(req.query.packagename === undefined)
-	{
+  if(req.query.packagename === undefined)
+  {
     noNotify();
-		res.send('Please provide us with a package name');
-	}
-	else
-	{		
+    res.send('Please provide us with a package name');
+  }
+  else
+  {		
     i = 0;
     var j = arrPackageNames.indexOf(req.query.packagename);
     if(j != -1) 
