@@ -23,7 +23,7 @@ process.on('SIGINT', function () {
 noNotify();
 
 // Ledstrip
-ar leds = require('rpi-ws2801');
+var leds = require('rpi-ws2801');
 leds.connect(59); // assign number of WS2801 LEDs
 process.on( 'SIGINT', function() {
   console.log( "\nshutting down from (Ctrl-C)" )
