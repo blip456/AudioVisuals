@@ -363,6 +363,8 @@ app.get('/clear', function (req, res) {
     noNotify();
     res.send('Please provide us with a package name');
   }
+  else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui")          
+        isCalling = false;
   else
   {   
     i = 0;
@@ -377,4 +379,4 @@ app.get('/clear', function (req, res) {
 });
 
 app.listen(3000);
-console.log('App Server running at port 3000');
+console.log('Grid Server running at port 3000');
