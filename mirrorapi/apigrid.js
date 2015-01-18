@@ -169,11 +169,11 @@ function facebook()
   for (var i = 1; i < notifyPixels.length; i++) {
     notifyPixels[i]=true;
   };
-  notifyPixels[6] = false;
-  notifyPixels[15] = false;
+  notifyPixels[4] = false;
+  notifyPixels[17] = false;
   notifyPixels[25] = false;
-  notifyPixels[26] = false;
-  notifyPixels[35] = false;
+  notifyPixels[24] = false;
+  notifyPixels[37] = false;
   notifyPixels[44] = false;
   notifyPixels[45] = false;
   notifyPixels[46] = false;
@@ -232,20 +232,24 @@ function calling()
     notifyPixels[i] = true
   };
 
-  for(var i = 23; i < 29;i++){
+  for(var i = 33; i < 39;i++){
     notifyPixels[i] = false;
   }
-  for(var i = 34; i < 38;i++){
+  for(var i = 43; i < 49;i++){
     notifyPixels[i] = false;
   }
   notifyPixels[2] = false;
-  notifyPixels[3] = false;
-  notifyPixels[8] = false;
+  notifyPixels[1] = false;
   notifyPixels[9] = false;
+  notifyPixels[10] = false;
   notifyPixels[12] = false;
-  notifyPixels[13] = false;
-  notifyPixels[18] = false;
+  notifyPixels[11] = false;
+  notifyPixels[20] = false;
   notifyPixels[19] = false;
+  notifyPixels[28] = false;
+  notifyPixels[29] = false;
+  notifyPixels[22] = false;
+  notifyPixels[23] = false;
   notifyPixels[0]=rgb2Int(0,0,0);
 }
 
