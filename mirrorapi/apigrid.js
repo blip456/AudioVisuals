@@ -299,10 +299,10 @@ function doVibrate(){
   piblaster.setServoPwm(3, 86);
   piblaster.setServoPwm(4, 82);
   pausecomp(50);
-  piblaster.setServoPwm(0, 90); 
-  piblaster.setServoPwm(1, 85);
-  piblaster.setServoPwm(3, 86);
-  piblaster.setServoPwm(4, 82);
+  piblaster.setServoPwm(0, 0); 
+  piblaster.setServoPwm(1, 0);
+  piblaster.setServoPwm(3, 0);
+  piblaster.setServoPwm(4, 0);
 
 }
 function pausecomp(ms) {
