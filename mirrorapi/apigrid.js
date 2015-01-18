@@ -169,11 +169,11 @@ function facebook()
   for (var i = 1; i < notifyPixels.length; i++) {
     notifyPixels[i]=true;
   };
-  notifyPixels[6] = false;
-  notifyPixels[15] = false;
+  notifyPixels[4] = false;
+  notifyPixels[17] = false;
   notifyPixels[25] = false;
-  notifyPixels[26] = false;
-  notifyPixels[35] = false;
+  notifyPixels[24] = false;
+  notifyPixels[37] = false;
   notifyPixels[44] = false;
   notifyPixels[45] = false;
   notifyPixels[46] = false;
