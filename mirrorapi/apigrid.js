@@ -23,10 +23,10 @@ function carousel()
 {
   if(isCalling)
   {
-     calling();
-  }
-  else
-  {
+   calling();
+ }
+ else
+ {
   l = arrPackageNames.length;
   if(l === 0)
   {
@@ -34,31 +34,31 @@ function carousel()
   }
   else
   {
-      console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
-      if(arrPackageNames[i] === "com.twitter.android")        
-          twitter();
-      else if(arrPackageNames[i] === "com.facebook.katana")        
-          facebook();
-      else if(arrPackageNames[i] === "com.instagram.android")          
-          instagram();
-      else if(arrPackageNames[i] === "com.google.android.gm")          
-        mail();
-      else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.android.mms" || arrPackageNames[i] === "com.google.android.apps.messaging")          
-        sms();
-      else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui")          
-        calling();
-      else if(arrPackageNames[i] === "be.howest.nmct.android")          
-        testing();
-      else if(arrPackageNames[i] === "com.facebook.orca")          
-        messenger();
-      else if(arrPackageNames[i] === "com.pushbullet.android")          
-        facebook();
-      if(i === l-1)
-        i = 0;
-      else
-        i ++;
-    }
+    console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
+    if(arrPackageNames[i] === "com.twitter.android")        
+      twitter();
+    else if(arrPackageNames[i] === "com.facebook.katana")        
+      facebook();
+    else if(arrPackageNames[i] === "com.instagram.android")          
+      instagram();
+    else if(arrPackageNames[i] === "com.google.android.gm")          
+      mail();
+    else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.android.mms" || arrPackageNames[i] === "com.google.android.apps.messaging")          
+      sms();
+    else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui")          
+      calling();
+    else if(arrPackageNames[i] === "be.howest.nmct.android")          
+      testing();
+    else if(arrPackageNames[i] === "com.facebook.orca")          
+      messenger();
+    else if(arrPackageNames[i] === "com.pushbullet.android")          
+      facebook();
+    if(i === l-1)
+      i = 0;
+    else
+      i ++;
   }
+}
 }
 
 setInterval(drawLEDs,1000/30);
@@ -285,74 +285,94 @@ function CheckVibrate(qry)
 		}
 	}
 }
+var piblaster = require("pi-servo-blaster.js");
+function doVibrate(){
 
-function doVibrate()
-{
-	// Simon zet hier de code om de Servo te doen bewegen
+  piblaster.setServoPwm(0, 89);
+  piblaster.setServoPwm(1, 86);
+  piblaster.setServoPwm(3, 85);
+  piblaster.setServoPwm(4, 110);
+
+  pausecomp(50);
+  piblaster.setServoPwm(0, 90);
+  piblaster.setServoPwm(1, 85);
+  piblaster.setServoPwm(3, 86);
+  piblaster.setServoPwm(4, 82);
+  pausecomp(50);
+  piblaster.setServoPwm(0, 90); 
+  piblaster.setServoPwm(1, 85);
+  piblaster.setServoPwm(3, 86);
+  piblaster.setServoPwm(4, 82);
+
 }
+function pausecomp(ms) {
+  ms += new Date().getTime();
+  while (new Date() < ms){}
+
+} 
 
 // API
 app.get('/twitter', function (req, res) {
 	CheckVibrate(req.query);
-    twitter();
-    if(req.query.packagename !== undefined)
+  twitter();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Twitter turned on');
+  res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
 	CheckVibrate(req.query);
-    facebook();
-    if(req.query.packagename !== undefined)
+  facebook();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Facebook turned on');
+  res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
 	CheckVibrate(req.query);
-    messenger();
-    if(req.query.packagename !== undefined)
+  messenger();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Messenger turned on');
+  res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
 	CheckVibrate(req.query);
-    instagram();
-    if(req.query.packagename !== undefined)
+  instagram();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Instagram turned on');
+  res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
 	CheckVibrate(req.query);
-    mail();
-    if(req.query.packagename !== undefined)
+  mail();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Gmail turned on');
+  res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
 	CheckVibrate(req.query);
-    sms();
-    if(req.query.packagename !== undefined)
+  sms();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('SMS turned on');
+  res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
 	CheckVibrate(req.query);
-    calling();
-    isCalling = true;    
-    res.send('Call turned on');
+  calling();
+  isCalling = true;    
+  res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
 	CheckVibrate(req.query);
-    testing();
-    if(req.query.packagename !== undefined)
+  testing();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Pushbullet turned on');
+  res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
 	CheckVibrate(req.query);
-    testing();
-    if(req.query.packagename !== undefined)
+  testing();
+  if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
-    res.send('Mirari turned on');
+  res.send('Mirari turned on');
   console.log(arrPackageNames);
 });
 app.get('/clear', function (req, res) {
@@ -364,7 +384,7 @@ app.get('/clear', function (req, res) {
     res.send('Please provide us with a package name');
   }
   else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui")          
-        isCalling = false;
+    isCalling = false;
   else
   {   
     i = 0;
