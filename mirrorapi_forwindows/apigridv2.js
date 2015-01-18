@@ -3,18 +3,6 @@ var express = require('express');
 var app = express();
 var arrPackageNames = [];
 
-var ws281x = require("rpi-ws281x-native");
-var NUM_LEDS = parseInt(process.argv[2], 50) || 50,
-pixelData = new Uint32Array(NUM_LEDS),
-notifyPixels = new Array(NUM_LEDS+1);
-ws281x.init(NUM_LEDS);
-// ---- trap the SIGINT and reset before exit
-process.on('SIGINT', function () {
-  ws281x.reset();
-  process.nextTick(function () { process.exit(0); });
-});
-noNotify();
-
 var isCalling = false;
 var i = 0;
 var l = arrPackageNames.length;
@@ -23,72 +11,52 @@ function carousel()
 {
   if(isCalling)
   {
-   calling();
- }
- else
- {
-  l = arrPackageNames.length;
-  if(l === 0)
-  {
-    noNotify();
+   //calling();
+   console.log('Calling');
   }
   else
   {
-    console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
-    if(arrPackageNames[i] === "com.twitter.android")        
-      twitter();
-    else if(arrPackageNames[i] === "com.facebook.katana")        
-      facebook();
-    else if(arrPackageNames[i] === "com.instagram.android")          
-      instagram();
-    else if(arrPackageNames[i] === "com.google.android.gm")          
-      mail();
-    else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.android.mms" || arrPackageNames[i] === "com.google.android.apps.messaging")          
-      sms();
-    else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui" || arrPackageNames[i] === "com.android.server.telecom")          
-      calling();
-    else if(arrPackageNames[i] === "be.howest.nmct.android")          
-      testing();
-    else if(arrPackageNames[i] === "com.facebook.orca")          
-      messenger();
-    else if(arrPackageNames[i] === "com.pushbullet.android")          
-      facebook();
-    if(i === l-1)
-      i = 0;
+    l = arrPackageNames.length;
+    if(l === 0)
+    {
+      //noNotify();
+    }
     else
-      i ++;
-  }
-}
-}
-
-setInterval(drawLEDs,1000/30);
-var offset = 0;
-function drawLEDs()
-{
-  if(notifyPixels[0] == true){
-    for (var i = 0; i < NUM_LEDS; i++) {
-      pixelData[i] = colowheel((offset + i) % 256);
+    {
+      console.log(arrPackageNames + "Lengte: " + l + " Integer: " + i);
+      if(arrPackageNames[i] === "com.twitter.android") 
+        console.log('Twitter');       
+        //twitter();
+      else if(arrPackageNames[i] === "com.facebook.katana")  
+      console.log('face');       
+        //facebook();
+      else if(arrPackageNames[i] === "com.instagram.android") 
+      console.log('isnt');          
+        //instagram();
+      else if(arrPackageNames[i] === "com.google.android.gm") 
+      console.log('mail');          
+        //mail();
+      else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.android.mms" || arrPackageNames[i] === "com.google.android.apps.messaging")          
+        console.log('sms'); 
+        //sms();
+      else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui") 
+      console.log('callschanged');          
+        //calling();
+      else if(arrPackageNames[i] === "be.howest.nmct.android") 
+      console.log('testing');          
+        //testing();
+      else if(arrPackageNames[i] === "com.facebook.orca")  
+      console.log('messenger²');         
+        //messenger();
+      else if(arrPackageNames[i] === "com.pushbullet.android") 
+      console.log('pushbull');          
+        //facebook();
+      if(i === l-1)
+        i = 0;
+      else
+        i ++;
     }
-    offset = (offset + 1) % 256;
-  }else{
-    for (var i = 0; i < NUM_LEDS; i++) {
-      if(notifyPixels[i+1]==true)
-        pixelData[i] = notifyPixels[0];
-      else if(notifyPixels[i+1]===false){
-        pixelData[i] = rgb2Int(255,255,255);
-      }
-      else{
-        pixelData[i] = notifyPixels[i+1];
-      }
-    }
   }
-  
-  ws281x.render(pixelData);
-}
-
-function noNotify()
-{
-  notifyPixels[0] = true;
 }
 
 function mail()
@@ -281,30 +249,12 @@ function CheckVibrate(qry)
 	{
 		if(qry.vibrate === "true")
 		{
-			doVibrate();
+			//doVibrate();
 		}
 	}
 }
-var piblaster = require("pi-servo-blaster.js");
-function doVibrate(){
 
-  piblaster.setServoPwm(0, 89);
-  piblaster.setServoPwm(1, 86);
-  piblaster.setServoPwm(3, 85);
-  piblaster.setServoPwm(4, 110);
 
-  pausecomp(50);
-  piblaster.setServoPwm(0, 90);
-  piblaster.setServoPwm(1, 85);
-  piblaster.setServoPwm(3, 86);
-  piblaster.setServoPwm(4, 82);
-  pausecomp(50);
-  piblaster.setServoPwm(0, 0); 
-  piblaster.setServoPwm(1, 0);
-  piblaster.setServoPwm(3, 0);
-  piblaster.setServoPwm(4, 0);
-
-}
 function pausecomp(ms) {
   ms += new Date().getTime();
   while (new Date() < ms){}
@@ -314,76 +264,78 @@ function pausecomp(ms) {
 // API
 app.get('/twitter', function (req, res) {
 	CheckVibrate(req.query);
-  twitter();
+  //twitter();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
 	CheckVibrate(req.query);
-  facebook();
+  //facebook();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
 	CheckVibrate(req.query);
-  messenger();
+  //messenger();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
 	CheckVibrate(req.query);
-  instagram();
+  //instagram();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
 	CheckVibrate(req.query);
-  mail();
+  //mail();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
 	CheckVibrate(req.query);
-  sms();
+  //sms();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
 	CheckVibrate(req.query);
-  calling();
+  //calling();
+  console.log(arrPackageNames);
   isCalling = true;    
   res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
 	CheckVibrate(req.query);
-  testing();
+  //testing();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
 	CheckVibrate(req.query);
-  testing();
+  //testing();
   if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
   res.send('Mirari turned on');
   console.log(arrPackageNames);
 });
 app.get('/clear', function (req, res) {
-  console.log(req.query.packagename);
+  console.log('je hebt clear: ' +req.query.packagename);
+
   if(req.query.packagename === "com.google.android.dialer" ||req.query.packagename ==="com.android.incallui" || req.query.packagename ==="com.android.server.telecom")          
     isCalling = false;
   if(req.query.packagename === undefined)
   {
-    noNotify();
-    res.send('Please provide us with a package name');
-  }
+    //noNotify();
+    res.send('please provide us a package name');
+  } 
   else
   {   
     i = 0;
