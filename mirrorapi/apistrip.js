@@ -35,7 +35,8 @@ function randomAnimation(){
 };
 
 app.get('/effect', function (req, res) {
-    if(req.query.effectname !== undefined)
+  res.send('Effect change');
+  if(req.query.effectname !== undefined)
 	{
 		switch(req.query.effectname){
 			case 'Screensaver':
