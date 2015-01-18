@@ -3,7 +3,8 @@ var express = require('express');
 var app = express();
 
 var leds = require('rpi-ws2801');
-leds.connect(59); // assign number of WS2801 LEDs
+var numPixels= 59;
+leds.connect(numPixels); // assign number of WS2801 LEDs
 process.on( 'SIGINT', function() {
   console.log( "\nshutting down from (Ctrl-C)" )
   leds.clear(); 
