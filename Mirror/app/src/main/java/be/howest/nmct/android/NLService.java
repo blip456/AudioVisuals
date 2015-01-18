@@ -95,7 +95,7 @@ public class NLService extends NotificationListenerService {
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
-        if(sbn.getPackageName().equals("com.google.android.dialer") || sbn.getPackageName().equals("com.android.phone") || sbn.getPackageName().equals("com.android.incallui") || sbn.getPackageName().equals("com.android.server.telecom") && MainActivity.isCall)
+        if(sbn.getPackageName().equals("com.google.android.dialer") || sbn.getPackageName().equals("com.android.incallui") || sbn.getPackageName().equals("com.android.server.telecom") && MainActivity.isCall)
         {
             new APIGetTask().execute(baseAPIurl + "call?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);

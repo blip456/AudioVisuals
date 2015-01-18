@@ -83,9 +83,9 @@ function carousel()
           instagram();
       else if(arrPackageNames[i] === "com.google.android.gm")          
         mail();
-      else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.google.android.apps.messaging")          
+      else if(arrPackageNames[i] === "com.textra" || arrPackageNames[i] === "com.android.mms" || arrPackageNames[i] === "com.google.android.apps.messaging")          
         sms();
-      else if(arrPackageNames[i] === "com.google.android.dialer")          
+      else if(arrPackageNames[i] === "com.google.android.dialer" || arrPackageNames[i] === "com.android.incallui")          
         calling();
       else if(arrPackageNames[i] === "be.howest.nmct.android")          
         testing();
