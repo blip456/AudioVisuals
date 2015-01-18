@@ -6,15 +6,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.ToggleButton;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +35,9 @@ public class MainActivity extends ActionBarActivity {
     private NotificationReceiver nReceiver;
     SharedPreferences.Editor editor;
     public SharedPreferences sharedpreferences;
+    ToggleButton tglVibrate;
+    Spinner spnEffects;
+
 
     public static boolean isTwitter;
     public static boolean isFacebook;
@@ -33,6 +47,8 @@ public class MainActivity extends ActionBarActivity {
     public static boolean isCall;
     public static boolean isPushbullet;
     public static boolean isMessenger;
+    public static boolean isVibrate;
+
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Twitter = "isTwitter";
@@ -43,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String Call = "isCall";
     public static final String Pushbullet = "isPushbullet";
     public static final String Messenger = "isMessenger";
+    public static final String Vibrate = "isVibrate";
 
     Switch swhTwitter;
     Switch swhFacebook;
@@ -62,6 +79,21 @@ public class MainActivity extends ActionBarActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("be.howest.nmct.android.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
+
+        spnEffects = (Spinner)findViewById(R.id.spnEffecten);
+        tglVibrate = (ToggleButton)findViewById(R.id.toggleVibrate);
+
+        spnEffects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                new APIGetTask().execute(NLService.baseAPIurl + "effect?effectname=" + (parent.getItemAtPosition(position).toString().replace(" ", "")));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         swhTwitter = (Switch)findViewById(R.id.twitterToggle);
         swhFacebook = (Switch)findViewById(R.id.facebookToggle);
@@ -105,6 +137,10 @@ public class MainActivity extends ActionBarActivity {
         {
             isMessenger = sharedpreferences.getBoolean(Messenger, true);
         }
+        if (sharedpreferences.contains(Vibrate))
+        {
+            isVibrate = sharedpreferences.getBoolean(Vibrate, true);
+        }
 
         swhTwitter.setChecked(isTwitter);
         swhFacebook.setChecked(isFacebook);
@@ -114,6 +150,16 @@ public class MainActivity extends ActionBarActivity {
         swhCall.setChecked(isCall);
         swhPushbullet.setChecked(isPushbullet);
         swhMessenger.setChecked(isMessenger);
+
+        tglVibrate.setChecked(isVibrate);
+
+        tglVibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editPrefs(Vibrate, tglVibrate.isChecked());
+                isVibrate = !isVibrate;
+            }
+        });
 
         swhTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -173,7 +219,6 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -204,6 +249,27 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+        }
+    }
+
+    class APIGetTask extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls) {
+            try {
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI uri = new URI(urls[0]+"&vibrate="+MainActivity.isVibrate);
+                request.setURI(uri);
+                HttpResponse response = client.execute(request);
+                Log.i("API: ", "Response of get is: " + response);
+            } catch (Exception e) {
+                this.exception = e;
+                exception.printStackTrace();
+            }
+
+            return "";
         }
     }
 }

@@ -31,11 +31,23 @@ process.on( 'SIGINT', function() {
   leds.disconnect();
   process.exit( )
 })
+leds.fill(0xFF, 255, 0x00);
+// after 2 seconds set first 6 LEDs to (red, green, blue, red, green, blue)
+setTimeout(function(){
+  leds.setRGB(0, '#FF0000');    // set LED1 to red
+  leds.setRGB(1, '#00FF00');    // set LED2 to green
+  leds.setRGB(2, '#0000FF');    // set LED3 to blue
+ 
+  leds.setColor(3, [255,0,0]);  // set LED4 to red
+  leds.setColor(4, [0,255,0]);  // set LED5 to green
+  leds.setColor(5, [0,0,255]);  // set LED6 to blue
+  
+  // send all set colors to SPI via update();
+  leds.update();
+}, 2000);
 
-
-randomAnimation();
-function randomAnimation(){
-
+setTimeout(randomAnimation, 4000);
+function randomAnimation(){ 
   var colorBuffer = new Buffer(leds.getChannelCount());
   var animationTick = 0.005;
   var angle = 0;
@@ -54,6 +66,13 @@ function randomAnimation(){
     angle+=animationTick;
   },5);
 };
+
+
+
+
+
+
+
 
 var isCalling = false;
 var i = 0;
@@ -306,62 +325,53 @@ function rgb2Int(r, g, b) {
 
 
 app.get('/twitter', function (req, res) {
-	CheckVibrate(req.query);
     twitter();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Twitter turned on');
 });
 app.get('/facebook', function (req, res) {
-	CheckVibrate(req.query);
     facebook();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Facebook turned on');
 });
 app.get('/messenger', function (req, res) {
-	CheckVibrate(req.query);
     messenger();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Messenger turned on');
 });
 app.get('/instagram', function (req, res) {
-	CheckVibrate(req.query);
     instagram();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Instagram turned on');
 });
 app.get('/gmail', function (req, res) {
-	CheckVibrate(req.query);
     mail();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Gmail turned on');
 });
 app.get('/sms', function (req, res) {
-	CheckVibrate(req.query);
     sms();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('SMS turned on');
 });
 app.get('/call', function (req, res) {
-	CheckVibrate(req.query);
     calling();
     isCalling = true;    
     res.send('Call turned on');
 });
 app.get('/pushbullet', function (req, res) {
-	CheckVibrate(req.query);
     testing();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Pushbullet turned on');
 });
 app.get('/test', function (req, res) {
-	CheckVibrate(req.query);
     testing();
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
@@ -370,14 +380,13 @@ app.get('/test', function (req, res) {
 });
 app.get('/clear', function (req, res) {
   console.log(req.query.packagename);
-
-  if(req.query.packagename === undefined)
-  {
+	if(req.query.packagename === undefined)
+	{
     noNotify();
-    res.send('Please provide us with a package name');
-  }
-  else
-  {   
+		res.send('Please provide us with a package name');
+	}
+	else
+	{		
     i = 0;
     var j = arrPackageNames.indexOf(req.query.packagename);
     if(j != -1) 
@@ -388,44 +397,13 @@ app.get('/clear', function (req, res) {
   }
   console.log(arrPackageNames);
 });
-app.get('/effect', function (req, res) {
-    if(req.query.effectname !== undefined)
-	{
-		switch(req.query.effectname){
-			case 'Screensaver':
-				Screensaver();
-				break;
-			case 'RotatingPyramids':
-				RotatingPyramids();
-				break;
-			case 'SpookyEyes':
-				SpookyEyes()
-				break;
-			default:
-				Screensaver();
-				break;
-		}
-	}
-	else
-		Screensaver();
+app.get('/test', function (req, res) {
+    testing();
+    if(req.query.packagename !== undefined)
+    arrPackageNames.push(req.query.packagename);
+    res.send('Mirari turned on');
+  console.log(arrPackageNames);
 });
-
-function CheckVibrate(qry)
-{
-	if(qry.vibrate !== undefined)
-	{
-		if(qry.vibrate === "true")
-		{
-			doVibrate();
-		}
-	}
-}
-
-function doVibrate()
-{
-	// Simon zet hier de code om de Servo te doen bewegen
-}
-
 // Express route for incoming requests for a customer name app.get('/inputs/:id', function(req, res){ res.send(inputs[req.params.id]); });   // Express route for any other unrecognised incoming requests app.get('*', function(req, res){ res.send('Unrecognised API call', 404); });  // Express route to handle errors app.use(function(err, req, res, next){ if (req.xhr) { res.send(500, 'Oops, Something went wrong!'); } else { next(err); } });
 app.listen(3000);
 console.log('App Server running at port 3000');

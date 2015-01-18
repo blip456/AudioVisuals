@@ -29,7 +29,7 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
     private NLServiceReceiver nlservicereciver;
-    private String baseAPIurl = "http://192.168.0.197:3000/";
+    public static String baseAPIurl = "http://192.168.0.197:3000/";
 
 
     public  List<String> arrImportantNotifications;
@@ -88,14 +88,14 @@ public class NLService extends NotificationListenerService {
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
-        if(sbn.getPackageName().equals("com.textra") || sbn.getPackageName().equals("com.google.android.apps.messaging") && MainActivity.isSMS)
+        if(sbn.getPackageName().equals("com.textra")|| sbn.getPackageName().equals("com.android.mms") || sbn.getPackageName().equals("com.google.android.apps.messaging") && MainActivity.isSMS)
         {
             new APIGetTask().execute(baseAPIurl + "sms?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
             Log.i(TAG,"**********  onNotificationPosted");
             Log.i(TAG,"ID :" + sbn.getId() + "t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
         }
-        if(sbn.getPackageName().equals("com.google.android.dialer") || sbn.getPackageName().equals("com.android.server.telecom") && MainActivity.isCall)
+        if(sbn.getPackageName().equals("com.google.android.dialer") || sbn.getPackageName().equals("com.android.phone") || sbn.getPackageName().equals("com.android.incallui") || sbn.getPackageName().equals("com.android.server.telecom") && MainActivity.isCall)
         {
             new APIGetTask().execute(baseAPIurl + "call?packagename="+ sbn.getPackageName());
             AddNotificationToArray(sbn);
@@ -121,20 +121,6 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         new APIGetTask().execute(baseAPIurl + "clear?packagename="+sbn.getPackageName());
-       /* new APIGetTask().execute(baseAPIurl + "clear");
-        int i = 0;
-        for(String s : arrImportantNotifications)
-        {
-            if(s.equals(sbn.getPackageName()))
-            {
-                arrImportantNotifications.remove(i);
-                break;
-            }
-            i++;
-        }
-
-        Log.i("Notificatie: ", "Nog in de array " + arrImportantNotifications);*/
-
     }
 
     public void AddNotificationToArray(StatusBarNotification sbn)
@@ -163,7 +149,6 @@ public class NLService extends NotificationListenerService {
                 sendBroadcast(i3);
 
             }
-
         }
     }
 
@@ -175,7 +160,7 @@ public class NLService extends NotificationListenerService {
             try {
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                URI uri = new URI(urls[0]);
+                URI uri = new URI(urls[0]+"&vibrate="+MainActivity.isVibrate);
                 request.setURI(uri);
                 HttpResponse response = client.execute(request);
                 Log.i("API: ", "Response of get is: " + response);
