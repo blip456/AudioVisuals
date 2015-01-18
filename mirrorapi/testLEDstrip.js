@@ -9,6 +9,9 @@ process.on( 'SIGINT', function() {
   process.exit( )
 });
 
+var stream = require('stream');
+var util = require('util');
+
 var intervalID;
 var workingEffect = "nothing";
 
@@ -43,39 +46,41 @@ var colors = new Array(3)
 for (var i = 0; i < 3; i++) {
   colors[i] = new Array(staart+1);
 }
-
+var time = 3250;
 function runningLeds(){
-
-  workingEffect = "runningLeds";
-  console.log("runningLeds");
   
-  giveMeMyColors();
-  for (counter; counter <= numPixels; counter++){
+  workingEffect = "runningLeds";
+
+  intervalID = setInterval(function() {
     
-    //1ste lus
-    for (var j = staart; j >= 1 ; j--) {
-      leds.setColor(counter + j,[ colors[0][j], colors[1][j], colors[2][j]]);
-    }
-    leds.setColor(counter, [colors[0][0], colors[1][0], colors[2][0]]);
+    giveMeMyColors();
+    for (counter; counter <= numPixels; counter++){
+      //1ste lus
+      for (var j = staart; j >= 1 ; j--) {
+        leds.setColor(counter + j,[ colors[0][j], colors[1][j], colors[2][j]]);
+      }
+      leds.setColor(counter, [colors[0][0], colors[1][0], colors[2][0]]);
 
-    for (var j = 1; j < staart ; j++) {
-      leds.setColor(counter - j, [colors[0][j], colors[1][j], colors[2][j]]);
-    }
+      for (var j = 1; j < staart ; j++) {
+        leds.setColor(counter - j, [colors[0][j], colors[1][j], colors[2][j]]);
+      }
 
+      //2de lus
+      for (var j = staart; j >= 1 ; j--) {
+        leds.setColor((numPixels - counter) - j, [colors[0][j], colors[1][j], colors[2][j]]);
+      }
+      leds.setColor(numPixels - counter,[colors[0][0], colors[1][0], colors[2][0]]);
 
-    //2de lus
-    for (var j = staart; j >= 1 ; j--) {
-      leds.setColor((numPixels - counter) - j, [colors[0][j], colors[1][j], colors[2][j]]);
+      for (var j = 1; j < staart ; j++) {
+        leds.setColor((numPixels - counter) + j, [colors[0][j], colors[1][j], colors[2][j]]);
+      }
+      pausecomp(50);
+      leds.update();
+      
     }
-    leds.setColor(numPixels - counter,[colors[0][0], colors[1][0], colors[2][0]]);
-
-    for (var j = 1; j < staart ; j++) {
-      leds.setColor((numPixels - counter) + j, [colors[0][j], colors[1][j], colors[2][j]]);
-    }
-    leds.update();
-    pausecomp(50);
-  }
-  counter = 0;
+    counter = 0;
+    
+  },3250);
 }
 
 function pausecomp(ms) {
@@ -85,7 +90,6 @@ function pausecomp(ms) {
 } 
 
 function giveMeMyColors() {
-
 
   //generate rgb color
   var color = new Array(3);
@@ -114,7 +118,6 @@ function checkAnotherGo(){
   console.log(goLeds);
   if(goLeds){
     runningLeds();
-
   }else{
     randomAnimation();
   }
@@ -129,11 +132,12 @@ var util = require('util');
 
 process.stdin.on('data', function (text){console.log('received data:', util.inspect(text));
   if (text === 'running\n' && (workingEffect === "randomAnimation" || workingEffect === "nothing")) {
+    
     clearInterval(intervalID);
     goLeds = true;
     checkAnotherGo();
   }else if(text === 'random\n' && (workingEffect === "runningLeds" || workingEffect === "nothing")){
-    //clearTimeout(intervalID);
+    clearInterval(intervalID);
     goLeds = false;
     checkAnotherGo();
   }else if(text === 'i\n'){
@@ -141,7 +145,6 @@ process.stdin.on('data', function (text){console.log('received data:', util.insp
   }
 });
 
-checkAnotherGo();
 
 
 

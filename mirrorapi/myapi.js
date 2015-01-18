@@ -24,7 +24,8 @@ noNotify();
 
 // Ledstrip
 var leds = require('rpi-ws2801');
-leds.connect(59); // assign number of WS2801 LEDs
+var numPixels= 59;
+leds.connect(numPixels); // assign number of WS2801 LEDs
 process.on( 'SIGINT', function() {
   console.log( "\nshutting down from (Ctrl-C)" )
   leds.clear(); 
@@ -392,7 +393,7 @@ app.get('/effect', function (req, res) {
 	{
 		switch(req.query.effectname){
 			case 'Screensaver':
-        		randomAnimation();
+          randomAnimation();
 				break;
 			case 'RotatingPyramids':
       console.log("RotatingPyramids");
