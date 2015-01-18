@@ -407,6 +407,27 @@ app.get('/clear', function (req, res) {
   }
   console.log(arrPackageNames);
 });
+app.get('/effect', function (req, res) {
+    if(req.query.effectname !== undefined)
+	{
+		switch(req.query.effectname){
+			case 'Screensaver':
+				Screensaver();
+				break;
+			case 'RotatingPyramids':
+				RotatingPyramids();
+				break;
+			case 'SpookyEyes':
+				SpookyEyes()
+				break;
+			default:
+				Screensaver();
+				break;
+		}
+	}
+	else
+		Screensaver();
+});
 
 function CheckVibrate(qry)
 {

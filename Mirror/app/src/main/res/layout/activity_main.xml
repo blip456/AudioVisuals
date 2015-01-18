@@ -1,5 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -18,26 +23,30 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"/>
 
-<ToggleButton
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Vibrate on notification"
-    android:id="@+id/toggleVibrate"
-    android:layout_below="@id/btnCreateNotify"/>
+    <ToggleButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Vibrate on notification"
+        android:textOff="No vibrate"
+        android:textOn="Vibrate"
+        android:id="@+id/toggleVibrate"
+        android:layout_below="@id/btnCreateNotify"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Push notifications of following applications:"
+        android:layout_marginTop="32dp"
         android:id="@+id/textView"
         android:layout_below="@+id/toggleVibrate"
         android:layout_alignParentStart="true" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/textView">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
+        android:id="@+id/rlApps">
 
         <ImageView
             android:id="@+id/twitterLogo"
@@ -297,7 +306,24 @@
 
         </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Choose an effect for the LED strip:"
+        android:layout_marginTop="32dp"
+        android:id="@+id/textViewSpinner"
+        android:layout_below="@+id/rlApps"
+        android:layout_alignParentStart="true" />
+
     <Spinner
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></Spinner>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/spnEffecten"
+        android:layout_below="@id/textViewSpinner"
+        android:entries="@array/effecten"
+    android:prompt="@string/spinnerprompt"/>
+
 </RelativeLayout>
+    </ScrollView>

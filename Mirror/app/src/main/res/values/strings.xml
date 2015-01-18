@@ -4,5 +4,10 @@
     <string name="app_name">Mirari</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="spinnerprompt">Choose an effect</string>
+    <string-array name="effecten">
+        <item>Screensaver</item>
+        <item>Rotating Pyramids</item>
+        <item>Spooky Eyes</item>
+    </string-array>
 </resources>
