@@ -113,7 +113,6 @@ public class NLService extends NotificationListenerService {
         {
             AddNotificationToArray(sbn);
             new APIGetTask().execute(baseAPIurl + "test?packagename="+ sbn.getPackageName());
-            Log.i("Er is een notificatie", "Packagename:" + sbn.getPackageName());
         }
         Log.i("Er is een notificatie", "Algemene notificatie: Packagename:" + sbn.getPackageName());
     }
@@ -158,12 +157,12 @@ public class NLService extends NotificationListenerService {
 
         protected String doInBackground(String... urls) {
             try {
+                Log.i("Testing api: ", "Grid URL = " + urls[0]);
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
                 URI uri = new URI(urls[0]+"&vibrate="+MainActivity.isVibrate);
                 request.setURI(uri);
                 HttpResponse response = client.execute(request);
-                Log.i("API: ", "Response of get is: " + response);
             } catch (Exception e) {
                 this.exception = e;
                 exception.printStackTrace();

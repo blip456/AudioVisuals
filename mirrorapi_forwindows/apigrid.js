@@ -53,6 +53,7 @@ app.get('/pushbullet', function (req, res) {
 });
 app.get('/test', function (req, res) {
     //testing();
+    console.log('Testing');
     if(req.query.packagename !== undefined)
     arrPackageNames.push(req.query.packagename);
     res.send('Mirari turned on');

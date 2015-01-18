@@ -110,6 +110,7 @@ function map(x, in_min, in_max, out_min, out_max)
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 app.get('/effect', function (req, res) {
+  res.send('Effect change');
   console.log("change effect");
   if(req.query.effectname !== undefined)
   {

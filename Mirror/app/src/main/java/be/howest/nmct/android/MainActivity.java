@@ -259,12 +259,12 @@ public class MainActivity extends ActionBarActivity {
 
         protected String doInBackground(String... urls) {
             try {
+                Log.i("Testing api: ", "Strip URL = " + urls[0]);
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                URI uri = new URI(urls[0]+"&vibrate="+MainActivity.isVibrate);
+                URI uri = new URI(urls[0]);
                 request.setURI(uri);
                 HttpResponse response = client.execute(request);
-                Log.i("API: ", "Response of get is: " + response);
             } catch (Exception e) {
                 this.exception = e;
                 exception.printStackTrace();
