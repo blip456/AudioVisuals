@@ -47,11 +47,8 @@ for (var i = 0; i < 3; i++) {
 function runningLeds(){
 
   workingEffect = "runningLeds";
-  console.log("runningLeds");
-  
   giveMeMyColors();
   for (counter; counter <= numPixels; counter++){
-    
     //1ste lus
     for (var j = staart; j >= 1 ; j--) {
       leds.setColor(counter + j,[ colors[0][j], colors[1][j], colors[2][j]]);
@@ -61,7 +58,6 @@ function runningLeds(){
     for (var j = 1; j < staart ; j++) {
       leds.setColor(counter - j, [colors[0][j], colors[1][j], colors[2][j]]);
     }
-
 
     //2de lus
     for (var j = staart; j >= 1 ; j--) {
@@ -76,6 +72,8 @@ function runningLeds(){
     pausecomp(50);
   }
   counter = 0;
+  if(goLeds)
+    requestAnimationFrame(runningLeds);
 }
 
 function pausecomp(ms) {
@@ -113,7 +111,7 @@ var goLeds = false;
 function checkAnotherGo(){
   console.log(goLeds);
   if(goLeds){
-    runningLeds();
+    requestAnimationFrame(runningLeds);
 
   }else{
     randomAnimation();
@@ -141,7 +139,6 @@ process.stdin.on('data', function (text){console.log('received data:', util.insp
   }
 });
 
-checkAnotherGo();
 
 
 
