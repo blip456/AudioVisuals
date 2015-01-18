@@ -232,20 +232,24 @@ function calling()
     notifyPixels[i] = true
   };
 
-  for(var i = 23; i < 29;i++){
+  for(var i = 33; i < 39;i++){
     notifyPixels[i] = false;
   }
-  for(var i = 34; i < 38;i++){
+  for(var i = 43; i < 49;i++){
     notifyPixels[i] = false;
   }
   notifyPixels[2] = false;
-  notifyPixels[3] = false;
-  notifyPixels[8] = false;
+  notifyPixels[1] = false;
   notifyPixels[9] = false;
+  notifyPixels[10] = false;
   notifyPixels[12] = false;
-  notifyPixels[13] = false;
-  notifyPixels[18] = false;
+  notifyPixels[11] = false;
+  notifyPixels[20] = false;
   notifyPixels[19] = false;
+  notifyPixels[28] = false;
+  notifyPixels[29] = false;
+  notifyPixels[22] = false;
+  notifyPixels[23] = false;
   notifyPixels[0]=rgb2Int(0,0,0);
 }
 
