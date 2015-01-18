@@ -29,7 +29,7 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
     private NLServiceReceiver nlservicereciver;
-    public static String baseAPIurl = "http://192.168.0.197:3000/";
+    String baseAPIurl = "http://192.168.0.197:3000/";
 
 
     public  List<String> arrImportantNotifications;

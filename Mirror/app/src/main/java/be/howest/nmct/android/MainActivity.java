@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
     private NotificationReceiver nReceiver;
     SharedPreferences.Editor editor;
     public SharedPreferences sharedpreferences;
+    String baseAPIurl = "http://192.168.0.197:2000/";
     ToggleButton tglVibrate;
     Spinner spnEffects;
 
@@ -86,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
         spnEffects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                new APIGetTask().execute(NLService.baseAPIurl + "effect?effectname=" + (parent.getItemAtPosition(position).toString().replace(" ", "")));
+                new APIGetTask().execute(baseAPIurl + "effect?effectname=" + (parent.getItemAtPosition(position).toString().replace(" ", "")));
             }
 
             @Override
