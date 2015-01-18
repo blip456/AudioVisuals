@@ -31,16 +31,15 @@ process.on( 'SIGINT', function() {
   leds.disconnect();
   process.exit( )
 })
+var intervalIDeffect;
 
-
-randomAnimation();
 function randomAnimation(){
 
   var colorBuffer = new Buffer(leds.getChannelCount());
   var animationTick = 0.005;
   var angle = 0;
   var ledDistance = 0.3;
-  setInterval(function(){
+  intervalIDeffect = setInterval(function(){
     angle = (angle < Math.PI * 2) ? angle : angle - Math.PI*2;
     for (var i=0; i<colorBuffer.length; i+=3){
       //red
@@ -393,21 +392,23 @@ app.get('/effect', function (req, res) {
 	{
 		switch(req.query.effectname){
 			case 'Screensaver':
-				Screensaver();
+        		randomAnimation();
 				break;
 			case 'RotatingPyramids':
-				RotatingPyramids();
+      console.log("RotatingPyramids");
+          clearInterval(intervalIDeffect);
+      //	RotatingPyramids();
 				break;
 			case 'SpookyEyes':
-				SpookyEyes()
+				//SpookyEyes()
 				break;
 			default:
-				Screensaver();
+				randomAnimation();
 				break;
 		}
 	}
 	else
-		Screensaver();
+		randomAnimation();
 });
 
 function CheckVibrate(qry)
